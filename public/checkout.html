@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safeguard Premier Checkout – OpsLink Systems</title>
+  <link rel="icon" href="https://i.postimg.cc/4y7fpLWq/Safe-Guard-Bot.png" />
+  <script src="https://js.stripe.com/v3/"></script>
+
+<style>
+  :root {
+    --bg: #04060d;
+    --card: rgba(11, 18, 32, 0.85);
+    --accent: #ff6600;
+    --accent2: #ff944d;
+    --text-main: #f5f7fa;
+    --text-soft: #9da3af;
+    --radius-lg: 18px;
+    --shadow-accent: 0 0 25px rgba(255, 102, 0, 0.3);
+    --transition: all 0.3s ease;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", sans-serif; }
+
+  body {
+    background: radial-gradient(circle at 25% 20%, #0b1220 0%, #05070f 80%);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  nav {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px 60px;
+    background: rgba(10, 15, 25, 0.6);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-left { display: flex; align-items: center; gap: 12px; }
+  .nav-left img { width: 40px; height: 40px; filter: drop-shadow(0 0 6px rgba(255,102,0,0.6)); }
+  .nav-left span { font-size: 1.35rem; font-weight: 600; color: var(--accent); }
+
+  .checkout-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+  }
+
+  .checkout-container {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-lg);
+    padding: 45px;
+    max-width: 620px;
+    width: 100%;
+    box-shadow: 0 0 35px rgba(255,102,0,0.1);
+    backdrop-filter: blur(15px);
+    animation: fadeIn 1s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 8px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  p {
+    text-align: center;
+    color: var(--text-soft);
+    margin-bottom: 35px;
+    font-size: 0.95rem;
+  }
+
+  form { display: flex; flex-direction: column; gap: 20px; }
+
+  label { font-size: 0.95rem; font-weight: 500; color: var(--text-main); }
+
+  /* UNIVERSAL INPUT STYLING */
+  input, select, .StripeElement {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-lg);
+    padding: 15px;
+    font-size: 1rem;
+    width: 100%;
+    color: var(--text-main);
+    transition: var(--transition);
+  }
+
+  input:focus, select:focus, .StripeElement--focus {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-accent);
+    outline: none;
+  }
+
+  /* COUNTRY SELECT FIXED */
+  select {
+    appearance: none;
+    cursor: pointer;
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--accent) 50%),
+      linear-gradient(135deg, var(--accent) 50%, transparent 50%);
+    background-position:
+      calc(100% - 20px) calc(50%),
+      calc(100% - 15px) calc(50%);
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+  }
+
+  select option {
+    background: #0b1220;
+    color: white;
+  }
+
+  /* STRIPE FIELDS IMPROVED */
+  .StripeElement {
+    padding: 15px !important;
+    border-radius: var(--radius-lg);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    transition: var(--transition);
+  }
+
+  .StripeElement--focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 12px rgba(255,102,0,0.4) !important;
+  }
+
+  .StripeElement--invalid {
+    border-color: #ff3333 !important;
+  }
+
+  /* CARD FIELD ROW FIX */
+  .card-row {
+    display: flex;
+    gap: 12px;
+  }
+
+  .card-row > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .summary-box {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    color: var(--text-soft);
+    font-size: 0.9rem;
+  }
+
+  .summary-box strong { color: var(--text-main); }
+
+  #submit-btn {
+    padding: 15px;
+    border: none;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    box-shadow: 0 0 10px rgba(255,102,0,0.3);
+  }
+
+  #submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(255,102,0,0.6);
+  }
+
+  #payment-message {
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--text-soft);
+    min-height: 20px;
+    margin-top: 5px;
+  }
+
+  .agreement-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.83rem;
+    line-height: 1.4;
+    color: var(--text-soft);
+    background: rgba(255,255,255,0.03);
+    border-radius: var(--radius-lg);
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .agreement-box input { width: 18px; height: 18px; cursor: pointer; }
+  .agreement-box a { color: var(--accent2); text-decoration: none; }
+  .agreement-box a:hover { text-decoration: underline; }
+
+  footer {
+    text-align: center;
+    padding: 25px;
+    font-size: 0.9rem;
+    color: var(--text-soft);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .glow {
+    position: fixed;
+    top: -200px;
+    left: -200px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255,102,0,0.25), transparent 70%);
+    filter: blur(100px);
+    z-index: 0;
+    animation: float 12s ease-in-out infinite alternate;
+  }
+
+  @keyframes float {
+    from { transform: translate(0,0) scale(1); }
+    to { transform: translate(100px,80px) scale(1.2); }
+  }
+</style>
+
+</head>
+<body>
+
+<div class="glow"></div>
+
+<nav>
+  <div class="nav-left">
+    <a href="/home" class="nav-logo-link">
+      <img src="https://i.postimg.cc/4y7fpLWq/Safe-Guard-Bot.png" alt="Safeguard Logo" class="nav-logo" />
+      <span class="nav-title">OpsLink Safeguard</span>
+    </a>
+  </div>
+</nav>
+
+<div class="checkout-wrapper">
+  <div class="checkout-container">
+    <h1>Safeguard Premier Checkout</h1>
+    <p>Securely complete your subscription. License activates instantly after payment.</p>
+
+    <form id="payment-form">
+      <label>Email Address</label>
+      <input id="email" type="email" placeholder="Email Address (Required)" required />
+
+      <label>Country</label>
+      <select id="country">
+        <option value="US" selected>United States</option>
+        <option value="CA">Canada</option>
+        <option value="GB">United Kingdom</option>
+        <option value="AU">Australia</option>
+        <option value="DE">Germany</option>
+        <option value="FR">France</option>
+        <option value="IN">India</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label>Card Number</label>
+      <div id="card-number" class="StripeElement"></div>
+
+      <div class="card-row">
+        <div>
+          <label>Expiry</label>
+          <div id="card-expiry" class="StripeElement"></div>
+        </div>
+        <div>
+          <label>CVC</label>
+          <div id="card-cvc" class="StripeElement"></div>
+        </div>
+      </div>
+
+      <div class="summary-box" id="summary"></div>
+
+      <label class="agreement-box">
+        <input type="checkbox" id="agree">
+        <span>
+          I agree to recurring monthly billing of <strong>$7.99 USD</strong> (plus tax) until cancellation.
+          Refunds may only be issued within 7 days under verified service failure.
+          I accept the
+          <a href="https://legal.opslinksystems.xyz" target="_blank">Terms of Service</a> and
+          <a href="https://legal.opslinksystems.xyz/billing.html" target="_blank">Billing Agreement</a>.
+        </span>
+      </label>
+
+      <button id="submit-btn" type="submit">Start Subscription</button>
+      <div id="payment-message"></div>
+    </form>
+  </div>
+</div>
+
+<footer>© 2025 OpsLink Systems Network — All Rights Reserved.</footer>
+
+<script>
+  const stripe = Stripe("pk_live_51SVFpBLQjsrxMZMFiPh041fNL37kau7u4uITjjmKXkBabyHvx30Xl6scvSFDHBJDZlG6C71GFKltPWMEQwcU8z1R00j99wuaPd");
+
+  /* Stripe Elements styling */
+  const elements = stripe.elements({
+    appearance: {
+      theme: "night",
+      variables: {
+        colorText: "#ffffff",
+        colorBackground: "rgba(255,255,255,0.06)",
+        colorPrimary: "#ff6600",
+        borderRadius: "14px",
+        fontFamily: '"Segoe UI", sans-serif',
+        fontSizeBase: "16px",
+      },
+      rules: {
+        ".Input": {
+          border: "1px solid rgba(255,255,255,0.15)",
+          padding: "14px",
+          transition: "0.3s",
+        },
+        ".Input:focus": {
+          borderColor: "#ff6600",
+          boxShadow: "0 0 10px rgba(255,102,0,0.4)",
+        },
+        ".Label": { color: "#e5e7eb", fontWeight: "500" },
+      },
+    },
+  });
+
+  const cardNumber = elements.create("cardNumber");
+  const cardExpiry = elements.create("cardExpiry");
+  const cardCvc = elements.create("cardCvc");
+
+  cardNumber.mount("#card-number");
+  cardExpiry.mount("#card-expiry");
+  cardCvc.mount("#card-cvc");
+
+  /* ========= COUNTRY / CURRENCY / TAX ========= */
+
+  // CAD base pricing
+  const baseCAD = 7.99;
+
+  // Approx FX rates: 1 CAD = X in other currencies
+  const fxRates = {
+    CAD: 1.00,
+    USD: 0.74,
+    GBP: 0.58,
+    EUR: 0.67,
+    AUD: 1.09,
+    INR: 61.0,
+    JPY: 114.0,
+  };
+
+  const countryData = {
+    CA: { currency: "CAD", tax: 0.13 },
+    US: { currency: "USD", tax: 0.08 },
+    GB: { currency: "GBP", tax: 0.20 },
+    FR: { currency: "EUR", tax: 0.20 },
+    DE: { currency: "EUR", tax: 0.19 },
+    AU: { currency: "AUD", tax: 0.10 },
+    IN: { currency: "INR", tax: 0.18 },
+    JP: { currency: "JPY", tax: 0.10 },
+    Other: { currency: "CAD", tax: 0.00 },
+  };
+
+  const summary = document.getElementById("summary");
+  const countrySelect = document.getElementById("country");
+
+  function updateSummary() {
+    const country = countrySelect.value;
+    const { currency, tax } = countryData[country] || countryData["Other"];
+    const rate = fxRates[currency] || 1;
+    const localPrice = baseCAD * rate;
+    const taxAmt = localPrice * tax;
+    const total = localPrice + taxAmt;
+
+    summary.innerHTML = `
+      <div>Product: <strong>Safeguard Premier Subscription</strong></div>
+      <div>Base Price: ${symbol(currency)}${localPrice.toFixed(2)} ${currency}</div>
+      <div>Tax (${Math.round(tax * 100)}%): ${symbol(currency)}${taxAmt.toFixed(2)} ${currency}</div>
+      <div><strong>Total: ${symbol(currency)}${total.toFixed(2)} ${currency}</strong></div>
+      <div style="margin-top:6px; font-size:0.8rem; color:#9ca3af;">
+        *Final billing occurs in CAD (C$7.99 CAD)
+      </div>
+    `;
+  }
+
+  function symbol(code) {
+    return (
+      {
+        CAD: "C$",
+        USD: "$",
+        GBP: "£",
+        EUR: "€",
+        AUD: "A$",
+        INR: "₹",
+        JPY: "¥",
+      }[code] || "$"
+    );
+  }
+
+  countrySelect.addEventListener("change", updateSummary);
+  updateSummary();
+
+  /* ========= STRIPE PAYMENT ========= */
+
+  document.getElementById("payment-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const agree = document.getElementById("agree");
+    const email = document.getElementById("email").value.trim();
+    const msg = document.getElementById("payment-message");
+    const btn = document.getElementById("submit-btn");
+    const country = countrySelect.value;
+
+    if (!agree.checked) return (msg.textContent = "❌ Please agree to billing terms.");
+    if (!email) return (msg.textContent = "❌ Email required.");
+
+    msg.textContent = "Processing...";
+    btn.disabled = true;
+
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, country }),
+      });
+      const data = await res.json();
+      if (!data.clientSecret) throw new Error("Server error.");
+
+      const result = await stripe.confirmCardPayment(data.clientSecret, {
+        payment_method: { card: cardNumber, billing_details: { email } },
+      });
+
+      if (result.error) {
+        msg.textContent = "❌ " + result.error.message;
+        btn.disabled = false;
+      } else {
+        msg.textContent = "✅ Subscription active! Redirecting...";
+        localStorage.setItem("safeguard_customer", data.customerId);
+        setTimeout(() => (window.location.href = `/success/${result.paymentIntent.id}`), 1000);
+      }
+    } catch (err) {
+      msg.textContent = "❌ " + err.message;
+      btn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>

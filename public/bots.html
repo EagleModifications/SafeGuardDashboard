@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safeguard Bots – OpsLink Systems</title>
+  <link rel="icon" href="https://i.postimg.cc/4y7fpLWq/Safe-Guard-Bot.png" />
+  <style>
+    :root {
+      --bg-main: #04060d;
+      --bg-card: #0b1220;
+      --accent: #ff6600;
+      --accent2: #ff944d;
+      --text-main: #e5e7eb;
+      --text-soft: #a1a1aa;
+      --radius-lg: 18px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", sans-serif; }
+
+    body {
+      background: radial-gradient(circle at 20% 20%, #0b1220, #050816 70%);
+      color: var(--text-main);
+      overflow-x: hidden;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 60px;
+      background: rgba(10,15,25,0.7);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .nav-logo {
+      height: 40px;
+    }
+
+    .nav-title {
+      margin-left: 8px;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .nav-left img {
+      width: 36px;
+      height: 36px;
+      filter: drop-shadow(0 0 6px rgba(255,102,0,0.4));
+    }
+
+    .nav-left span {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .nav-links a {
+      color: var(--text-soft);
+      text-decoration: none;
+      margin-left: 24px;
+      font-weight: 500;
+      transition: 0.2s ease;
+    }
+
+    .nav-links a:hover { color: var(--accent2); }
+
+    .hero {
+      text-align: center;
+      padding: 110px 20px 90px;
+      position: relative;
+    }
+
+    .hero img {
+      width: 140px;
+      height: 140px;
+      filter: drop-shadow(0 0 16px rgba(255,102,0,0.5));
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      color: var(--accent);
+      margin-top: 20px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 12px rgba(255,102,0,0.4);
+    }
+
+    .hero p {
+      color: var(--text-soft);
+      margin-top: 14px;
+      font-size: 1.1rem;
+    }
+
+    .pricing {
+      text-align: center;
+      margin: 80px auto;
+      max-width: 800px;
+      padding: 0 30px;
+    }
+
+    .pricing .price {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      box-shadow: 0 0 25px rgba(255,102,0,0.08);
+    }
+
+    .price h2 { color: var(--accent); font-size: 2rem; margin-bottom: 10px; }
+    .price h3 { font-size: 2.5rem; color: var(--accent2); margin-bottom: 25px; }
+
+    .price ul {
+      text-align: left;
+      max-width: 500px;
+      margin: 0 auto;
+      color: var(--text-soft);
+      line-height: 1.6;
+    }
+
+    .price li { margin-bottom: 10px; }
+
+    .purchase-btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 14px 34px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.25s;
+    }
+
+    .purchase-btn:hover {
+      background: var(--accent2);
+      transform: translateY(-3px);
+      box-shadow: 0 0 25px rgba(255,102,0,0.4);
+    }
+
+    .rules {
+      max-width: 900px;
+      margin: 100px auto;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 40px;
+      box-shadow: 0 0 20px rgba(255,102,0,0.05);
+    }
+
+    .rules h2 { color: var(--accent); margin-bottom: 20px; text-align: center; }
+    .rules ol { line-height: 1.7; color: var(--text-soft); padding-left: 24px; }
+    .rules li { margin-bottom: 12px; }
+
+    /* =====================
+       COMPARISON TABLE
+    ===================== */
+    .compare {
+      max-width: 950px;
+      margin: 80px auto 120px;
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius-lg);
+      overflow-x: auto;
+      box-shadow: 0 0 25px rgba(255,102,0,0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      color: var(--text-main);
+    }
+
+    th, td {
+      padding: 16px 20px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    th {
+      background: rgba(255,102,0,0.15);
+      color: var(--accent2);
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    td:first-child { font-weight: 600; color: var(--accent); }
+    td { text-align: center; }
+
+    .bots-section {
+    text-align: center;
+    padding: 80px 40px;
+    background: radial-gradient(circle at center, rgba(255,102,0,0.06), transparent 80%);
+  }
+
+  .bots-section h2 {
+    color: var(--accent);
+    font-size: 2.3rem;
+    margin-bottom: 12px;
+  }
+
+  .bots-section p {
+    color: var(--text-soft);
+    max-width: 700px;
+    margin: 0 auto 45px;
+    line-height: 1.6;
+  }
+
+  .bots-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 35px;
+  }
+
+  .bot-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255,255,255,0.05);
+    width: 300px;
+    padding: 30px 20px 40px;
+    box-shadow: 0 0 25px rgba(255,102,0,0.05);
+    transition: 0.3s ease;
+  }
+
+  .bot-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 0 30px rgba(255,102,0,0.15);
+  }
+
+  .bot-card img {
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 10px rgba(255,102,0,0.4));
+  }
+
+  .bot-card h3 {
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+
+  .bot-card p {
+    color: var(--text-soft);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .bot-card a {
+    display: inline-block;
+    margin-top: 15px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .bot-card a:hover {
+    color: var(--accent2);
+  }
+
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      background: #070b15;
+      color: var(--text-soft);
+      text-align: center;
+      padding: 30px 10px 40px;
+      font-size: 0.9rem;
+      margin-top: 60px;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-left">
+      <a href="/home" class="nav-logo-link">
+        <img src="https://i.postimg.cc/4y7fpLWq/Safe-Guard-Bot.png" alt="Safeguard Logo" class="nav-logo" />
+        <span class="nav-title">OpsLink Safeguard</span>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="/home">Home</a>
+      <a href="/bots" style="color:#ff944d;">Our Bots</a>
+      <a href="/panel">Panel</a>
+      <a href="/status">Status</a>
+      <a href="/docs">Docs</a>
+      <a href="/premier">Premier</a>
+      <a href="/billing">Billing</a>
+      <a href="https://discord.gg/UF6Dt66phh">Support</a>
+    </div>
+  </nav>
+
+  <section id="bots" class="bots-section">
+    <h2>The Safeguard Family</h2>
+    <p>From advanced protection to premium automation and even music playback — meet our three powerful bots built to enhance your Discord community.</p>
+
+    <div class="bots-container">
+      <div class="bot-card">
+        <img src="https://i.postimg.cc/4y7fpLWq/Safe-Guard-Bot.png" alt="Safeguard">
+        <h3>Safeguard</h3>
+        <p>The original all-in-one Discord security bot featuring anti-nuke, anti-raid, moderation, and activity monitoring for ultimate peace of mind.</p>
+        <a href="#">Learn More →</a>
+      </div>
+
+      <div class="bot-card">
+        <img src="https://i.postimg.cc/brDy1C6X/Safe-Guard-Premier.png" alt="Safeguard Premier">
+        <h3>Safeguard Premier</h3>
+        <p>Unlock the next level of defense with AI-based threat detection, custom audit analytics, role protection, and enterprise-grade control systems.</p>
+        <a href="/premier">Explore Premier →</a>
+      </div>
+
+      <div class="bot-card">
+        <img src="https://i.postimg.cc/C5BhbPc3/Safe-Guard-Music.png" alt="Safeguard Music">
+        <h3>Safeguard Music</h3>
+        <p>Experience seamless, secure, and high-quality music playback. Connect YouTube, Spotify, or SoundCloud with built-in protection and zero lag.</p>
+        <a href="#">Try Music →</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 OpsLink Systems Network — All Rights Reserved.<br>
+    Visit <a href="https://opslinksystems.xyz">OpsLink Systems</a> for more.
+  </footer>
+</body>
+</html>

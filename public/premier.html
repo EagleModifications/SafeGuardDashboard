@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safeguard Premier – OpsLink Systems</title>
+  <link rel="icon" href="/assets/Safeguard-Bot.png" />
+  <style>
+    :root {
+      --bg-main: #04060d;
+      --bg-card: #0b1220;
+      --accent: #ff6600;
+      --accent2: #ff944d;
+      --text-main: #e5e7eb;
+      --text-soft: #a1a1aa;
+      --radius-lg: 18px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", sans-serif; }
+
+    body {
+      background: radial-gradient(circle at 20% 20%, #0b1220, #050816 70%);
+      color: var(--text-main);
+      overflow-x: hidden;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 60px;
+      background: rgba(10,15,25,0.7);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .nav-logo {
+      height: 40px;
+    }
+
+    .nav-title {
+      margin-left: 8px;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .nav-left img {
+      width: 36px;
+      height: 36px;
+      filter: drop-shadow(0 0 6px rgba(255,102,0,0.4));
+    }
+
+    .nav-left span {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .nav-links a {
+      color: var(--text-soft);
+      text-decoration: none;
+      margin-left: 24px;
+      font-weight: 500;
+      transition: 0.2s ease;
+    }
+
+    .nav-links a:hover { color: var(--accent2); }
+
+    .hero {
+      text-align: center;
+      padding: 110px 20px 90px;
+      position: relative;
+    }
+
+    .hero img {
+      width: 140px;
+      height: 140px;
+      filter: drop-shadow(0 0 16px rgba(255,102,0,0.5));
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      color: var(--accent);
+      margin-top: 20px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 12px rgba(255,102,0,0.4);
+    }
+
+    .hero p {
+      color: var(--text-soft);
+      margin-top: 14px;
+      font-size: 1.1rem;
+    }
+
+    .pricing {
+      text-align: center;
+      margin: 80px auto;
+      max-width: 800px;
+      padding: 0 30px;
+    }
+
+    .pricing .price {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      box-shadow: 0 0 25px rgba(255,102,0,0.08);
+    }
+
+    .price h2 { color: var(--accent); font-size: 2rem; margin-bottom: 10px; }
+    .price h3 { font-size: 2.5rem; color: var(--accent2); margin-bottom: 25px; }
+
+    .price ul {
+      text-align: left;
+      max-width: 500px;
+      margin: 0 auto;
+      color: var(--text-soft);
+      line-height: 1.6;
+    }
+
+    .price li { margin-bottom: 10px; }
+
+    .purchase-btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 14px 34px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.25s;
+    }
+
+    .purchase-btn:hover {
+      background: var(--accent2);
+      transform: translateY(-3px);
+      box-shadow: 0 0 25px rgba(255,102,0,0.4);
+    }
+
+    .rules {
+      max-width: 900px;
+      margin: 100px auto;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 40px;
+      box-shadow: 0 0 20px rgba(255,102,0,0.05);
+    }
+
+    .rules h2 { color: var(--accent); margin-bottom: 20px; text-align: center; }
+    .rules ol { line-height: 1.7; color: var(--text-soft); padding-left: 24px; }
+    .rules li { margin-bottom: 12px; }
+
+    /* =====================
+       COMPARISON TABLE
+    ===================== */
+    .compare {
+      max-width: 950px;
+      margin: 80px auto 120px;
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius-lg);
+      overflow-x: auto;
+      box-shadow: 0 0 25px rgba(255,102,0,0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      color: var(--text-main);
+    }
+
+    th, td {
+      padding: 16px 20px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    th {
+      background: rgba(255,102,0,0.15);
+      color: var(--accent2);
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    td:first-child { font-weight: 600; color: var(--accent); }
+    td { text-align: center; }
+
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      background: #070b15;
+      color: var(--text-soft);
+      text-align: center;
+      padding: 30px 10px 40px;
+      font-size: 0.9rem;
+      margin-top: 60px;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <nav>
+  <div class="nav-left">
+    <a href="/home" class="nav-logo-link">
+      <img src="https://i.postimg.cc/4y7fpLWq/Safe-Guard-Bot.png" alt="Safeguard Logo" class="nav-logo" />
+      <span class="nav-title">OpsLink Safeguard</span>
+    </a>
+  </div>
+  <div class="nav-links">
+    <a href="/home">Home</a>
+    <a href="/bots">Our Bots</a>
+    <a href="/panel">Panel</a>
+    <a href="/status">Status</a>
+    <a href="/docs">Docs</a>
+    <a href="/premier" style="color:#ff944d;">Premier</a>
+    <a href="/billing">Billing</a>
+    <a href="https://discord.gg/UF6Dt66phh">Support</a>
+  </div>
+</nav>
+
+  <section class="hero">
+    <img src="/assets/Safeguard-Bot.png" alt="Safeguard Logo" />
+    <h1>Safeguard Premier</h1>
+    <p>Advanced Protection • Enterprise Grade • $7.99/month</p>
+     <div>
+    <p>DISCLAIMER: IF YOUR GONNA BUY PREMIER! PLEASE KEEP REGULAR SAFEGUARD IN YOUR SERVER, PREMIER COUNTS AS AN ADDITION ONTO SAFEGUARD! THANK YOU.</p>
+  </section>
+
+  <section class="pricing">
+    <div class="price">
+      <h2>Upgrade to Premier</h2>
+      <h3>$7.99 <span style="font-size:1rem;">/ month</span></h3>
+      <ul>
+        <li>✔ AI-based Anti-Raid & Anti-Nuke Protection</li>
+        <li>✔ Real-time Incident Detection & Auto Recovery</li>
+        <li>✔ Advanced Audit Logs & Threat Reports</li>
+        <li>✔ Priority Support with 1-hour response times</li>
+        <li>✔ Customizable License Dashboard Access</li>
+        <li>✔ Early Access to Beta Features</li>
+      </ul>
+      <a href="/checkout.html" class="purchase-btn">Purchase Premier License</a>
+    </div>
+  </section>
+
+  <section class="rules">
+    <h2>Safeguard Premier Rules & Terms</h2>
+    <ol>
+      <li>Each license key is unique and tied to one Discord server and one user.</li>
+      <li>Unauthorized key sharing, resale, or redistribution is strictly prohibited.</li>
+      <li>Subscription renews monthly; failure to renew disables Premier access.</li>
+      <li>Refunds may only be issued within 7 days under verified service failure.</li>
+      <li>Using Premier tools to harm, spam, or bypass Discord systems results in termination.</li>
+      <li>Premier features are limited to servers compliant with Discord TOS and OpsLink policies.</li>
+      <li>All billing is handled through OpsLink’s secure Stripe integration.</li>
+      <li>Violating these terms may result in loss of license without refund.</li>
+      <li>OpsLink Systems reserves the right to update these terms with or without notice. It is your responsibility to maintain updated.</li>
+    </ol>
+  </section>
+
+  <section class="compare">
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Safeguard (Free)</th>
+          <th>Safeguard Premier ($7.99/mo)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Basic Anti-Raid</td>
+          <td>✅</td>
+          <td>✅ Enhanced AI</td>
+        </tr>
+        <tr>
+          <td>Audit Logging</td>
+          <td>⚠️ Limited</td>
+          <td>✅ Full detailed logs</td>
+        </tr>
+        <tr>
+          <td>Incident Detection</td>
+          <td>❌</td>
+          <td>✅ Real-time AI alerts</td>
+        </tr>
+        <tr>
+          <td>Dashboard Access</td>
+          <td>✅</td>
+          <td>✅ Premier Control Panel</td>
+        </tr>
+        <tr>
+          <td>Support Level</td>
+          <td>Community Only</td>
+          <td>Priority 24/7 Support</td>
+        </tr>
+        <tr>
+          <td>License Protection</td>
+          <td>Free Use</td>
+          <td>🔒 Licensed & Verified</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    © 2025 OpsLink Systems Network — All Rights Reserved.<br>
+    Visit <a href="https://opslinksystems.xyz">OpsLink Systems</a> for more.
+  </footer>
+</body>
+</html>
