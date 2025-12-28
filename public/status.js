@@ -38,7 +38,7 @@ async function load() {
     if (s.incident) {
       updates.innerHTML += `
   <div class="update-down">
-    <img src="assets/down.png" alt="Down" class="status-icon">
+    <img src="https://i.postimg.cc/vBS8gFvs/down.png" alt="Down" class="status-icon">
     ${s.name} Down
   </div>
 `;
