@@ -408,7 +408,16 @@ app.get("/auth/discord/callback", async (req, res) => {
       headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
     });
 
-    const oauthData = await tokenRes.json();
+    const text = await tokenRes.text();
+    console.log("Discord token response:", text)
+
+    let oauthData;
+    try {
+      oauthData = JSON.parse(text);
+    } catch {
+      return res.redirect("/?error=oauth_parse_failed");
+    }
+
     if (!oauthData.access_token) return res.redirect("/?error=oauth_failed");
 
     const userRes = await fetch("https://discord.com/api/users/@me", {
@@ -606,4 +615,5 @@ if (!process.env.VERCEL) {
 }
 
 module.exports = app;
+
 
