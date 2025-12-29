@@ -405,29 +405,38 @@ app.get("/auth/discord/callback", async (req, res) => {
     const tokenRes = await fetch("https://discord.com/api/oauth2/token", {
       method: "POST",
       body: params,
-      headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
+      headers: { 
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Accept": "application/json"
+      },
     });
 
     const text = await tokenRes.text();
-    console.log("Discord token response:", text)
 
+    // Check if response is JSON
     let oauthData;
     try {
       oauthData = JSON.parse(text);
-    } catch {
-      return res.redirect("/?error=oauth_parse_failed");
+    } catch (err) {
+      console.error("Discord OAuth parse error:", err);
+      console.error("Response text:", text.slice(0, 500)); // log first 500 chars
+      return res.redirect("/?error=discord_blocked");
     }
 
-    if (!oauthData.access_token) return res.redirect("/?error=oauth_failed");
+    if (!oauthData.access_token) {
+      return res.redirect("/?error=oauth_failed");
+    }
 
     const userRes = await fetch("https://discord.com/api/users/@me", {
       headers: { Authorization: `Bearer ${oauthData.access_token}` },
     });
     const user = await userRes.json();
 
-    const token = jwt.sign({ user, access_token: oauthData.access_token }, process.env.SESSION_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      { user, access_token: oauthData.access_token },
+      process.env.SESSION_SECRET,
+      { expiresIn: "1h" }
+    );
 
     res.redirect("/?token=" + encodeURIComponent(token));
   } catch (err) {
@@ -615,5 +624,6 @@ if (!process.env.VERCEL) {
 }
 
 module.exports = app;
+
 
 
