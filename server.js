@@ -407,7 +407,8 @@ app.get("/auth/discord/callback", async (req, res) => {
       body: params,
       headers: { 
         "Content-Type": "application/x-www-form-urlencoded",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        "User-Agent": "SafeGuardDashboard (https://opslinksafeguard.org, v1.0)"
       },
     });
 
@@ -624,6 +625,7 @@ if (!process.env.VERCEL) {
 }
 
 module.exports = app;
+
 
 
 
