@@ -405,7 +405,7 @@ app.get("/auth/discord/callback", async (req, res) => {
     const tokenRes = await fetch("https://discord.com/api/oauth2/token", {
       method: "POST",
       body: params,
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
     });
 
     const oauthData = await tokenRes.json();
@@ -606,3 +606,4 @@ if (!process.env.VERCEL) {
 }
 
 module.exports = app;
+
